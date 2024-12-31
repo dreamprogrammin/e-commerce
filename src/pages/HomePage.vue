@@ -1,4 +1,20 @@
 <script setup>
+import { onMounted } from 'vue'
+import { getProduct, getProducts } from '@/api/products.js'
+
+onMounted(async () => {
+  try {
+    const data = await getProducts()
+    const product = await getProduct(1)
+
+    console.log(data)
+    console.log(product)
+  } catch (error) {
+    console.log(error)
+  } finally {
+    console.log('Запрос успешно отправлен')
+  }
+})
 </script>
 
 <template>
