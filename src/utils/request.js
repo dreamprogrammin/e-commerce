@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios"
 
 const BASE_API = import.meta.env.VITE_BASE_API
 console.log(BASE_API)
@@ -10,7 +10,7 @@ service.interceptors.request.use(
   (config) => {
     const conf = config
 
-    conf.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+    conf.headers["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8"
 
     return conf
   },
