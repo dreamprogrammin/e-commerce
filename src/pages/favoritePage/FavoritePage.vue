@@ -1,20 +1,9 @@
 <script setup>
-import { onMounted, ref } from "vue"
-import Product from "@/components/global/Product.vue"
+import { onMounted } from "vue"
+import { useFavoritesStore } from "@/stores/favorites.js"
 
-const products = ref([])
-const pending = ref(true)
+const { pending, products, getData } = useFavoritesStore()
 
-const getData = async () => {
-  pending.value = true
-  const data = localStorage.getItem("favorites")
-  if (data) {
-    setTimeout(() => {
-      products.value.push(JSON.parse(data))
-    }, 1000)
-  }
-  pending.value = false
-}
 onMounted(async () => {
   await getData()
 })

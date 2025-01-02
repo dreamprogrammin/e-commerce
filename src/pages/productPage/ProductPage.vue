@@ -1,25 +1,30 @@
 <script setup>
-import { onMounted, ref } from "vue"
-import { getProduct } from "@/api/products.js"
-
+import { onMounted } from "vue"
 import { useRoute } from "vue-router"
+import { useProductStore } from "@/stores/product.js"
+import { useFavoritesStore } from "@/stores/favorites.js"
 
-const product = ref([])
-const pending = ref(true)
+const { pending, product, getData } = useProductStore()
+const { toggleFavorites } = useFavoritesStore()
 const route = useRoute()
 
-const addFavorites = (product) => localStorage.setItem("favorites", JSON.stringify(product))
+const changeValue = (item) => {
+  if (item?.isFavorite) {
+    item.isFavorite = false
+  }
+  toggleFavorites(item)
+}
 const addCart = (product) => localStorage.setItem("cart", JSON.stringify(product))
 
 onMounted(async () => {
-  pending.value = true
-  try {
-    product.value = await getProduct(route.params.id)
-    console.log(product.value)
-  } catch (error) {
-    console.log(error)
-  } finally {
-    pending.value = false
+  await getData(route.params.id)
+
+  if (localStorage.getItem("favorites")) {
+    const items = JSON.parse(localStorage.getItem("favorites"))
+
+    if (items.findIndex((el) => el.id === product.id)) {
+      product.isFavorite = true
+    }
   }
 })
 </script>
@@ -47,9 +52,10 @@ onMounted(async () => {
 
         <div class="flex justify-end">
           <vue-feather
-            @click.prevent="addFavorites(product)"
+            @click.prevent="changeValue(product)"
             class="cursor-pointer"
             type="heart"
+            :fill="item?.isFavorite ? 'white' : ''"
           ></vue-feather>
           <vue-feather
             @click.prevent="addCart(product)"
