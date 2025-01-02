@@ -1,26 +1,18 @@
 <script setup>
-import { onMounted, ref } from "vue"
-import { getProducts } from "@/api/products.js"
+import { onMounted, watch } from "vue"
 import Product from "@/components/global/Product.vue"
+import { useProductsStore } from "@/stores/products"
 
-const products = ref([])
-const pending = ref(true)
-
-const getData = async () => {
-  pending.value = true
-  try {
-    const data = await getProducts()
-
-    products.value = data
-  } catch (error) {
-    console.log(error)
-  } finally {
-    pending.value = false
-  }
-}
-
+const { pending, products, getData } = useProductsStore()
+watch(products, (newValue) => {
+  console.log("ok", newValue)
+})
 onMounted(async () => {
   await getData()
+
+  setTimeout(() => {
+    console.log(products)
+  }, 500)
 })
 </script>
 

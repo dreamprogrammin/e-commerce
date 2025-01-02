@@ -1,4 +1,8 @@
 <script setup>
+import { defineProps } from "vue"
+import { useFavoritesStore } from "@/stores/favorites.js"
+
+// Определение props для компонента
 const props = defineProps({
   item: {
     type: Object,
@@ -7,8 +11,27 @@ const props = defineProps({
   },
 })
 
-const addFavorites = (item) => localStorage.setItem("favorites", JSON.stringify(item))
-const addCart = (item) => localStorage.setItem("cart", JSON.stringify(item))
+const { toggleFavorites } = useFavoritesStore()
+
+// Функция для добавления товара в корзину
+const addCart = (item) => {
+  // Получаем текущую корзину из localStorage
+  const cart = JSON.parse(localStorage.getItem("cart")) || []
+  // Добавляем новый товар в корзину
+  cart.push(item)
+  // Обновляем корзину в localStorage
+  localStorage.setItem("cart", JSON.stringify(cart))
+}
+
+// Функция для изменения статуса избранного
+const changeValue = (item) => {
+  if (item?.isFavorite) {
+    item.isFavorite = false
+  } else {
+    item.isFavorite = true
+  }
+  toggleFavorites(item)
+}
 </script>
 
 <template>
@@ -28,9 +51,10 @@ const addCart = (item) => localStorage.setItem("cart", JSON.stringify(item))
 
         <div class="flex justify-end w-full">
           <vue-feather
-            @click.prevent="addFavorites(item)"
+            @click.prevent="changeValue(item)"
             class="cursor-pointer"
             type="heart"
+            :fill="item?.isFavorite ? 'white' : ''"
           ></vue-feather>
           <vue-feather
             @click.prevent="addCart(item)"
