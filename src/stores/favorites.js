@@ -17,7 +17,7 @@ export const useFavoritesStore = defineStore("favorite", () => {
   }
 
   const toggleFavorites = (item) => {
-    if (products.value.findIndex((el) => el.id === item.id)) {
+    if (products.value.find((el) => el.id === item.id)) {
       const index = products.value.indexOf(item.id)
 
       products.value.splice(index, 1)

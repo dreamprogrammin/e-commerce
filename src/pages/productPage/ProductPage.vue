@@ -1,12 +1,16 @@
 <script setup>
-import { onMounted } from "vue"
+import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
-import { useProductStore } from "@/stores/product.js"
 import { useFavoritesStore } from "@/stores/favorites.js"
+import { useProductStore } from "@/stores/product.js"
 
-const { pending, product, getData } = useProductStore()
-const { toggleFavorites } = useFavoritesStore()
 const route = useRoute()
+
+const productStore = useProductStore()
+const { pending, product, getData } = productStore
+
+const favoritesStore = useFavoritesStore()
+const { toggleFavorites } = favoritesStore
 
 const changeValue = (item) => {
   if (item?.isFavorite) {
@@ -21,10 +25,13 @@ onMounted(async () => {
 
   if (localStorage.getItem("favorites")) {
     const items = JSON.parse(localStorage.getItem("favorites"))
-
-    if (items.findIndex((el) => el.id === product.id)) {
-      product.isFavorite = true
-    }
+    watch(product, (newValue) => {
+      if (newValue) {
+        if (items.find((el) => el.id === newValue.id)) {
+          newValue.isFavorite = true
+        }
+      }
+    })
   }
 })
 </script>
@@ -55,7 +62,7 @@ onMounted(async () => {
             @click.prevent="changeValue(product)"
             class="cursor-pointer"
             type="heart"
-            :fill="item?.isFavorite ? 'white' : ''"
+            :fill="product?.isFavorite ? 'white' : ''"
           ></vue-feather>
           <vue-feather
             @click.prevent="addCart(product)"

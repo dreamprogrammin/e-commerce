@@ -1,6 +1,6 @@
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { getProducts } from "@/api/products"
+import { getProducts } from "@/api/products.js"
 
 export const useProductsStore = defineStore("products", () => {
   const products = ref([])

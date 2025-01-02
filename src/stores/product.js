@@ -1,17 +1,16 @@
 // stores/product.js
 import { ref } from "vue"
 import { defineStore } from "pinia"
-import { getProduct } from "@/api/products"
+import { getProduct } from "@/api/products.js"
 
 export const useProductStore = defineStore("product", () => {
-  const product = ref(null) // Инициализация product как null
+  const product = ref([])
   const pending = ref(true)
 
   const getData = async (id) => {
     pending.value = true
     try {
-      const data = await getProduct(id)
-      product.value = data
+      product.value = await getProduct(id)
     } catch (error) {
       console.log(error)
     } finally {
