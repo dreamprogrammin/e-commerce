@@ -9,9 +9,7 @@ export const useProductsStore = defineStore("products", () => {
   const getData = async () => {
     pending.value = true
     try {
-      const data = await getProducts()
-
-      products.value = data
+      products.value = await getProducts()
     } catch (error) {
       console.log(error)
     } finally {
