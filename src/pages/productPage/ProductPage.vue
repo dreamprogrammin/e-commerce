@@ -29,6 +29,7 @@ onMounted(async () => {
       if (newValue) {
         if (items.find((el) => el.id === newValue.id)) {
           newValue.isFavorite = true
+          console.log(newValue)
         }
       }
     })
