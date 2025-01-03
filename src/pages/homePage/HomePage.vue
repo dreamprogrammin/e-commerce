@@ -12,49 +12,25 @@
   </div>
 </template>
 
-<script>
-import { onMounted, computed } from "vue"
+<script setup>
+import { onMounted } from "vue"
 import { useProductsStore } from "@/stores/products.js"
 import Product from "@/components/global/Product.vue"
 
-export default {
-  setup() {
-    // data
-    const productsStore = useProductsStore()
+const productsStore = useProductsStore()
+const { pending, products, getData } = productsStore
 
-    // computed
-    const products = computed(() => {
-      return productsStore.products
+onMounted(async () => {
+  await getData()
+
+  if (localStorage.getItem("favorites")) {
+    const items = JSON.parse(localStorage.getItem("favorites"))
+
+    products.forEach((element) => {
+      element.isFavorite = !!items.find((el) => el.id === element.id)
     })
-
-    const pending = computed(() => {
-      return productsStore.pending
-    })
-
-    // methods
-    const { getData } = productsStore
-
-    // hooks
-    onMounted(async () => {
-      await getData()
-
-      if (localStorage.getItem("favorites")) {
-        const items = JSON.parse(localStorage.getItem("favorites"))
-
-        products.value.forEach((element) => {
-          element.isFavorite = !!items.find((el) => el.id === element.id)
-        })
-      }
-    })
-
-    return {
-      products,
-      pending,
-    }
-  },
-
-  components: { Product },
-}
+  }
+})
 </script>
 
 <style lang="scss" scoped></style>
