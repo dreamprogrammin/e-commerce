@@ -2,8 +2,7 @@
 import { defineProps } from "vue"
 import { useFavoritesStore } from "@/stores/favorites.js"
 
-// Определение props для компонента
-const props = defineProps({
+const { item } = defineProps({
   item: {
     type: Object,
     required: true,
@@ -11,19 +10,15 @@ const props = defineProps({
   },
 })
 
-const { toggleFavorites } = useFavoritesStore()
+const favoritesStore = useFavoritesStore()
+const { toggleFavorites } = favoritesStore
 
-// Функция для добавления товара в корзину
 const addCart = (item) => {
-  // Получаем текущую корзину из localStorage
   const cart = JSON.parse(localStorage.getItem("cart")) || []
-  // Добавляем новый товар в корзину
   cart.push(item)
-  // Обновляем корзину в localStorage
   localStorage.setItem("cart", JSON.stringify(cart))
 }
 
-// Функция для изменения статуса избранного
 const changeValue = (item) => {
   if (item?.isFavorite) {
     item.isFavorite = false
@@ -49,7 +44,7 @@ const changeValue = (item) => {
         <span class="font-semibold text-xl">{{ item.title }}</span>
         <span>{{ item.price }} $</span>
 
-        <div class="flex justify-end w-full">
+        <div class="flex justify-end w-full grow">
           <vue-feather
             @click.prevent="changeValue(item)"
             class="cursor-pointer"
