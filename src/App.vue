@@ -2,6 +2,8 @@
 import TheHeader from "@/components/TheHeader.vue"
 import TheFooter from "@/components/TheFooter.vue"
 import { RouterView } from "vue-router"
+import {useFavoritesStore } from '@/stores/favorite' 
+import {useCartStore} from '@/stores/cart'
 </script>
 
 <template>
