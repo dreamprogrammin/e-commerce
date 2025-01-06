@@ -5,10 +5,14 @@ export const useCartStore = defineStore("cart", () => {
   const products = ref([])
   const pending = ref(true)
   const counter = computed(() => {
-    return products.value.length
+    let total = 0
+
+    products.value.map((el) => el.quantity = total)
+
+    return total
   })
 
-  const getData = () => {
+  const getDataCart = () => {
     setTimeout(() => {
       if (localStorage.getItem("favorites")) {
         products.value = JSON.parse(localStorage.getItem("favorites"))
@@ -19,18 +23,26 @@ export const useCartStore = defineStore("cart", () => {
     }, 1500)
   }
 
-  const toggleFavorites = (item) => {
+  const addCart = (item) => {
     if (products.value.find((el) => el.id === item.id)) {
       const index = products.value.indexOf(item)
 
-      products.value.splice(index, 1)
+      products.value[index].quantity++
     } else {
-      item.isFavorite = true
+      item.quantity = 1
 
       products.value.push(item)
     }
     localStorage.setItem("favorites", JSON.stringify(products.value))
   }
 
-  return { products, getData, toggleFavorites, counter, pending }
+  const removeCart = (item) => {
+      const index = products.value.indexOf(item)
+      
+      products.value.splice(index, 1)
+
+      localStorage.setItem("favorites", JSON.stringify(products.value))
+  }
+
+  return { products, getDataCart, removeCart, addCart, counter, pending }
 })
