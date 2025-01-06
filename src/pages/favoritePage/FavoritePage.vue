@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted } from "vue"
 import { useFavoritesStore } from "@/stores/favorites.js"
+import Product from "@/components/global/Product.vue"
 
 const favoriteStore = useFavoritesStore()
 
