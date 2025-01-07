@@ -1,6 +1,7 @@
 <script setup>
 import { defineProps } from "vue"
 import { useFavoritesStore } from "@/stores/favorites.js"
+import { useCartStore } from "@/stores/cart"
 
 const { item } = defineProps({
   item: {
@@ -11,14 +12,9 @@ const { item } = defineProps({
 })
 
 const favoritesStore = useFavoritesStore()
+const cartStore = useCartStore()
 const { toggleFavorites } = favoritesStore
-
-const addCart = (item) => {
-  const cart = JSON.parse(localStorage.getItem("cart")) || []
-  cart.push(item)
-  localStorage.setItem("cart", JSON.stringify(cart))
-}
-
+const { addCart } = cartStore
 const changeValue = (item) => {
   if (item?.isFavorite) {
     item.isFavorite = false

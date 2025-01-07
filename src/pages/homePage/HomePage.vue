@@ -4,7 +4,10 @@
 
     <ProgressSpinner v-if="pending" />
 
-    <div v-else class="grid grid-flow-col auto-cols-max">
+    <div
+      v-else
+      class="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+    >
       <template v-if="products.length">
         <Product v-for="product in products" :key="product.id" :item="product" />
       </template>

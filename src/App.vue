@@ -2,8 +2,19 @@
 import TheHeader from "@/components/TheHeader.vue"
 import TheFooter from "@/components/TheFooter.vue"
 import { RouterView } from "vue-router"
-import {useFavoritesStore } from '@/stores/favorite' 
-import {useCartStore} from '@/stores/cart'
+import { onMounted } from "vue"
+import { useCartStore } from "./stores/cart"
+import { useFavoritesStore } from "./stores/favorites"
+
+const cartStore = useCartStore()
+const favoriteStore = useFavoritesStore()
+
+const { getDataCart } = cartStore
+const { getData } = favoriteStore
+onMounted(async () => {
+  await getData
+  await getDataCart
+})
 </script>
 
 <template>
