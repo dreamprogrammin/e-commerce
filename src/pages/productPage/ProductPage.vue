@@ -3,6 +3,7 @@ import { onMounted, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useFavoritesStore } from "@/stores/favorites.js"
 import { useProductStore } from "@/stores/product.js"
+import { useCartStore } from "@/stores/cart"
 
 const route = useRoute()
 
@@ -12,13 +13,15 @@ const { pending, product, getData } = productStore
 const favoritesStore = useFavoritesStore()
 const { toggleFavorites } = favoritesStore
 
+const cartCounter = useCartStore()
+const { addCart } = cartCounter
+
 const changeValue = (item) => {
   if (item?.isFavorite) {
     item.isFavorite = false
   }
   toggleFavorites(item)
 }
-const addCart = (product) => localStorage.setItem("cart", JSON.stringify(product))
 
 onMounted(async () => {
   await getData(route.params.id)
